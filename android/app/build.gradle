@@ -1,0 +1,23 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.sonora.music'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.sonora.music'
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+    }
+    sourceSets.main.assets.srcDir layout.buildDirectory.dir('generated/webAssets')
+}
+
+tasks.register('copyWebAssets', Copy) {
+    from(rootProject.projectDir.parentFile) {
+        include 'index.html', 'styles.css', 'app.js', 'assets/**'
+    }
+    into layout.buildDirectory.dir('generated/webAssets/web')
+}
+tasks.named('preBuild').configure { dependsOn 'copyWebAssets' }
